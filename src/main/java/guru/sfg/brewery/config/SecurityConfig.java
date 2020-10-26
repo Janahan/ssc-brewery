@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -49,7 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 http
                         .authorizeRequests(
                                 authorize ->{
-                                    authorize.antMatchers("/","/webjars/**","/login","/resources/**").permitAll()
+                                    authorize
+                                            .antMatchers("/h2-console/**").permitAll() //Dont do in prod env
+                                            .antMatchers("/","/webjars/**","/login","/resources/**").permitAll()
                                     .antMatchers("/beers/find","/beers*").permitAll()
                                     .antMatchers(HttpMethod.GET,"/api/v1/beer/**").permitAll()
                                     .mvcMatchers(HttpMethod.GET,"/api/v1/beerUpc/{upc}").permitAll();
@@ -62,6 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .formLogin()
                         .and()
                         .httpBasic();
+                //h2 console config
+                http.headers().frameOptions().sameOrigin();
     }
 
     @Bean
@@ -74,8 +77,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return CustomPasswordEncoderFactory.createDelegatingPasswordEncoder();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    //Option1 Spring boot would detect these because there is no other
+    //@Autowired
+    //JpaUserDetailsService jpaUserDetailsService;
+
+    //@Override
+    //protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //Option1 Spring boot would detect these because there is no other
+        //auth.userDetailsService(this.jpaUserDetailsService).passwordEncoder(passwordEncoder());
+        /*
         auth.inMemoryAuthentication()
                 .withUser("jana")
                 //.password("{noop}jana123")
@@ -99,9 +109,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.password("{ldap}{SSHA}jb//u1/ABOB9T2/AmRhFkRu3ffBzcHKgmSGsqA==")
                 .password("{bcrypt15}$2a$15$2KYL5D/a8lCAZ.7CRDTghOk0FMtR7mYtQXOMTcPwS82pezxsCqHJ2")
                 .roles("CUSTOMER");
+    */
 
-
-    }
+    //}
 
     /*
     @Override
