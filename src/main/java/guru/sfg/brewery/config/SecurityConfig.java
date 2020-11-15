@@ -5,7 +5,6 @@ import guru.sfg.brewery.security.RestHeaderAuthFilter;
 import guru.sfg.brewery.security.RestURLAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -53,18 +52,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 authorize ->{
                                     authorize
                                             .antMatchers("/h2-console/**").permitAll() //Dont do in prod env
-                                            .antMatchers("/","/webjars/**","/login","/resources/**").permitAll()
+                                            .antMatchers("/","/webjars/**","/login","/resources/**").permitAll();
                                     //.antMatchers("/beers/find","/beers*").permitAll()
-                                            .mvcMatchers("/beers/find","/beers/{beerId}").hasAnyRole("ADMIN","CUSTOMER","USER")
+                                    //        .mvcMatchers("/beers/find","/beers/{beerId}").hasAnyRole("ADMIN","CUSTOMER","USER")
                                     //.antMatchers(HttpMethod.GET,"/api/v1/beer/**").permitAll()
-                                            .antMatchers(HttpMethod.GET,"/api/v1/beer/**").hasAnyRole("ADMIN","CUSTOMER","USER")
+                                          //  .antMatchers(HttpMethod.GET,"/api/v1/beer/**").hasAnyRole("ADMIN","CUSTOMER","USER")
                                            // .mvcMatchers(HttpMethod.DELETE,"/api/v1/beer/**").hasRole("ADMIN")
                                     //.mvcMatchers(HttpMethod.GET,"/api/v1/beerUpc/{upc}").permitAll()
-                                            .mvcMatchers(HttpMethod.GET,"/api/v1/beerUpc/{upc}").hasAnyRole("ADMIN","CUSTOMER","USER")
+                                        //    .mvcMatchers(HttpMethod.GET,"/api/v1/beerUpc/{upc}").hasAnyRole("ADMIN","CUSTOMER","USER")
                                             //.mvcMatchers("/brewery/breweries").hasRole("CUSTOMER")
                                             //.mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries").hasRole("CUSTOMER");
-                                            .mvcMatchers("/brewery/breweries").hasAnyRole("ADMIN","CUSTOMER")
-                                           .mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries").hasAnyRole("ADMIN","CUSTOMER");
+                                    //        .mvcMatchers("/brewery/breweries").hasAnyRole("ADMIN","CUSTOMER")
+                                    //       .mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries").hasAnyRole("ADMIN","CUSTOMER");
                                 }
                         )
                         .authorizeRequests()
